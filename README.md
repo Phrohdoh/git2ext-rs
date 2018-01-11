@@ -22,6 +22,14 @@ Finally you may run the following command from the root of the project's source 
 $ cargo build
 ```
 
+## Getting help
+
+I am often present in the `#orcaware` channel on `irc.freenode.net`.
+
+Note that this channel has many topics of discussion so you may see conversation about other projects there too.
+
+If IRC is not your thing or you don't get a good response I am happy to respond to [GitHub issues](https://github.com/Phrohdoh/git2ext-rs/issues/new) as well.
+
 ## License
 
 Licensed under either of
