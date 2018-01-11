@@ -1,0 +1,8 @@
+[package]
+name = "gext-cli"
+version = "0.0.1"
+authors = ["Taryn Hill <taryn@phrohdoh.com>"]
+publish = false
+
+[dependencies]
+git2ext = { path = "../../" }
