@@ -1,0 +1,12 @@
+[package]
+authors = ["Taryn Hill <taryn@phrohdoh.com>"]
+name = "git2ext"
+version = "0.0.1"
+description = "Provides a high-level, semantic API for dealing with git objects"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/Phrohdoh/git2ext-rs"
+include = ["src/**/*.rs", "Cargo.toml"]
+documentation = "https://docs.rs/git2ext/"
+
+[dependencies]
+git2 = "0.6.11"
