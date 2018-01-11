@@ -31,14 +31,14 @@ impl RepositoryExt for git2::Repository {
         let relative_file_path = relative_file_path.as_ref();
         let mut start_commit = start_commit;
 
-        if self.did_commit_modify_path(&start_commit, relative_file_path, mod_kind.clone()).map_err(|e| e)? {
+        if self.did_commit_modify_path(&start_commit, relative_file_path, mod_kind).map_err(|e| e)? {
             return Ok(Some(start_commit));
         }
 
         while let Ok(parent_commit) = start_commit.parent(0) {
             start_commit = parent_commit;
 
-            if self.did_commit_modify_path(&start_commit, relative_file_path, mod_kind.clone()).map_err(|e| e)? {
+            if self.did_commit_modify_path(&start_commit, relative_file_path, mod_kind).map_err(|e| e)? {
                 return Ok(Some(start_commit));
             }
         }
@@ -63,9 +63,9 @@ impl RepositoryExt for git2::Repository {
         let diff = self.diff_tree_to_tree(Some(&parent_tree), Some(&tree), None)
             .map_err(|e| e.description().to_string())?;
 
-        Ok(diff.deltas().find(|dt|
+        Ok(diff.deltas().any(|dt|
             dt.old_file().path() == Some(relative_file_path)
             && mod_kind.eq_git2(dt.status())
-        ).is_some())
+        ))
     }
 }
