@@ -10,6 +10,18 @@ This project is very much a work-in-progress.
 
 Please feel free to contribute, open issues, and discuss improvements!
 
+## Building
+
+To build `git2ext` you will need the Rust toolchain which can be acquired via `rustup` at [https://rustup.rs](https://rustup.rs).
+
+You may need to restart your shell before the command-line tools are available (also make sure `$HOME/.cargo/bin` is on your `$PATH`).
+
+Finally you may run the following command from the root of the project's source to build `git2ext`
+
+```sh
+$ cargo build
+```
+
 ## License
 
 Licensed under either of
