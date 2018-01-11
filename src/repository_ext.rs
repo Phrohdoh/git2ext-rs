@@ -5,14 +5,39 @@ use ::git2::{self, Commit};
 
 use ::ModificationKind;
 
+/// Extension methods for a `git2::Repository`.
 pub trait RepositoryExt {
+    /// Determine which commit modified the given path in the specified way (using `mod_kind`).
+    ///
+    /// Starting on `start_commit` (which should come from the `self` `git2::Repository` struct)
+    /// go backwards in time and investigate the relevant `git2::Delta` to determine if
+    /// the given path was modified in the specified manner.
+    ///
+    /// # Returns
+    /// * `Ok(Some(git2::Commit<'r>))` if a modifying commit was found
+    /// * `Ok(None)` if a modifying commit was not found
+    /// * `Err(String)` detailing the error encountered
+    ///
+    /// # Lifetimes
+    /// `'r` is the lifetime of the `git2::Repository` that this is called on
+    /// and the lifetime of the possible returned `git2::Commit`
     fn last_commit_that_modified_path<'r, P: AsRef<Path>>(
-        &self
+        &'r self
       , relative_file_path: P
       , start_commit: Commit<'r>
       , mod_kind: ModificationKind
     ) -> Result<Option<Commit<'r>>, String>;
 
+    /// Determine whether the given `git2::Commit` modified the given path in the specified manner.
+    ///
+    /// # Returns
+    /// * `Ok(true)` if the given commit did modify the path in the specified manner.
+    /// * `Ok(false)` if the given commit did not modify the path in the specified manner.
+    /// * `Err(String)` detailing the error encountered
+    ///
+    /// # Lifetimes
+    /// `'r` is the lifetime of the `git2::Repository` that this is called on
+    /// and the given `git2::Commit`.
     fn did_commit_modify_path<P: AsRef<Path>>(
         &self
       , commit: &Commit
@@ -23,7 +48,7 @@ pub trait RepositoryExt {
 
 impl RepositoryExt for git2::Repository {
     fn last_commit_that_modified_path<'r, P: AsRef<Path>>(
-        &self
+        &'r self
       , relative_file_path: P
       , start_commit: Commit<'r>
       , mod_kind: ModificationKind

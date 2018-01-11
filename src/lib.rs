@@ -8,18 +8,37 @@
 //!
 //! `git2ext` is very much a work-in-progress. Please feel free to contribute, open issues, and discuss improvements!
 
+#![deny(warnings)]
+#![deny(missing_docs)]
+
 pub extern crate git2;
 
 mod repository_ext;
 
 pub use repository_ext::RepositoryExt;
 
+/// How a path may have been modified in a commit.
+///
+/// This is a simplification of the `git2::Delta` enum.
 #[derive(Copy, Clone, Debug, PartialEq, Eq)]
 pub enum ModificationKind {
+    /// This variant encompasses all `git2::Delta` variants.
     Any,
+
+    /// This path was added to the git index.
     Added,
+
+    /// This path was deleted from the git index.
     Deleted,
+
+    /// This path was modified.
+    ///
+    /// TODO: Get clarification.
+    /// - Does this encompass other modifications (add, delete, rename, ...)?
+    /// - Is mtime tracked?
     Modified,
+
+    /// This path was renamed (example: a file was moved).
     Renamed,
 }
 
