@@ -80,10 +80,13 @@ impl RepositoryExt for git2::Repository {
         let relative_file_path = relative_file_path.as_ref();
         let tree = commit.tree().map_err(|e| e.description().to_string())?;
 
-        let parent_tree = commit.parent(0)
-            .map_err(|e| e.description().to_string())?
-            .tree()
-            .map_err(|e| e.description().to_string())?;
+        let parent_commit = match commit.parent(0) {
+            Ok(commit) => commit,
+            Err(_e) => return Ok(tree.get_path(relative_file_path).is_ok()),
+        };
+
+        let parent_tree = parent_commit
+            .tree().map_err(|e| format!("Failed to get tree of parent commit of '{}': {}", commit.id(), e.description()))?;
 
         let diff = self.diff_tree_to_tree(Some(&parent_tree), Some(&tree), None)
             .map_err(|e| e.description().to_string())?;
